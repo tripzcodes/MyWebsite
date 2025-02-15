@@ -3,7 +3,7 @@
 This is my personal website, where I showcase my projects, document my work, and share insights through my blog.
 
 ## Live Website
-[Visit my portfolio](#) *(Update with actual link when available)*
+[Visit my portfolio](#) *(Update with actual link soon)*
 
 ---
 
