@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Full-screen blank page */
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 1.5s ease-in-out;
+}
+
+.fade-in {
+  background-color: #1e1e1e; /* Minimalistic grey */
+}
+
+/* Dialogue Box */
+.dialogue-box {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: white;
+  font-size: 24px;
+  font-weight: 300;
+}
+
+/* Default state (hidden at start) */
+.dialogue-text {
+  opacity: 0;
+}
+
+/* Smooth fade-in for text */
+.fade-in-text {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+/* Smooth fade-out for text */
+.fade-out {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}

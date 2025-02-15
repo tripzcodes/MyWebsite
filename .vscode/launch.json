@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "Run and Debug React App",
+            "configurations": ["Run NPM Start", "Launch Chrome"]
+        }
+    ],
+    "configurations": [
+        {
+            "type": "node-terminal",
+            "request": "launch",
+            "name": "Run NPM Start",
+            "command": "npm start",
+            "cwd": "${workspaceFolder}", // Set to your project root folder
+            "console": "integratedTerminal" // Use the integrated terminal for the output
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMaps": true,
+            "trace": true
+        }
+    ]
+}
