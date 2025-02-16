@@ -8,10 +8,17 @@ function App() {
   const [isFadingOut, setIsFadingOut] = useState(true);
   const [songs, setSongs] = useState([]);
   const [currentSong, setCurrentSong] = useState(() => localStorage.getItem("lastSong") || "");
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [volume, setVolume] = useState(() => parseFloat(localStorage.getItem("volume")) || 0.2);
-  const [songImage, setSongImage] = useState(null);
+  const [songImage, setSongImage] = useState("/images/default-cover.jpg");
+  const [repeat, setRepeat] = useState(false);
+  const [songHistory, setSongHistory] = useState([]);
+  const [isMarquee, setIsMarquee] = useState(false);
+  const [autoplayAttempted, setAutoplayAttempted] = useState(false);
+
   const audioRef = useRef(null);
+  const titleRef = useRef(null);
+  const containerRef = useRef(null);
 
   const dialogueLines = ["hello", "welcome to my world"];
 
@@ -65,33 +72,66 @@ function App() {
 
   /** 🎵 Handle Playback **/
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-      localStorage.setItem("volume", volume);
-    }
-  }, [volume]);
+    if (!audioRef.current || autoplayAttempted) return;
 
-  useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.play().catch(() => setIsPlaying(false));
-      } else {
-        audioRef.current.pause();
+    audioRef.current.volume = volume;
+    localStorage.setItem("volume", volume);
+
+    const playAudio = async () => {
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+      } catch (err) {
+        console.warn("Autoplay blocked by browser. Requires user interaction.");
+        setIsPlaying(false);
       }
-    }
-  }, [isPlaying, currentSong]);
+      setAutoplayAttempted(true);
+    };
 
-  const togglePlay = () => {
-    if (!currentSong) return;
-    setIsPlaying(!isPlaying);
-  };
+    playAudio();
+  }, [currentSong, volume]);
 
+  /** 🔄 Play Next & Previous Songs **/
   const playNext = () => {
     if (songs.length > 0) {
+      setSongHistory(prev => [...prev, currentSong]);
       const nextSong = songs[Math.floor(Math.random() * songs.length)];
       setCurrentSong(nextSong);
       localStorage.setItem("lastSong", nextSong);
-      setIsPlaying(true); // Auto-play next song
+      setIsPlaying(true);
+    }
+  };
+
+  const playPrevious = () => {
+    if (songHistory.length > 0) {
+      const lastSong = songHistory.pop();
+      setSongHistory([...songHistory]);
+      setCurrentSong(lastSong);
+      localStorage.setItem("lastSong", lastSong);
+      setIsPlaying(true);
+    }
+  };
+
+  /** ⏸ Handle Play/Pause **/
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(() => console.warn("Playback error"));
+    }
+
+    setIsPlaying(!isPlaying);
+  };
+
+  /** 🔁 Handle Song End (Repeat) **/
+  const handleSongEnd = () => {
+    if (repeat && audioRef.current) {
+      audioRef.current.currentTime = 0; 
+      audioRef.current.play();
+    } else {
+      playNext();
     }
   };
 
@@ -99,17 +139,43 @@ function App() {
   useEffect(() => {
     if (!currentSong) return;
 
-    fetch(`http://localhost:3001/api/song-image?file=${encodeURIComponent(currentSong)}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.image) {
-          setSongImage(`data:image/jpeg;base64,${data.image}`);
+    fetch(`http://localhost:3001/api/song-image?file=${encodeURIComponent(currentSong.replace("/songs/", ""))}`)
+      .then(response => {
+        if (response.ok) {
+          return response.blob();
         } else {
-          setSongImage("/images/default-cover.jpg"); // Fallback image
+          throw new Error("No image found");
         }
       })
-      .catch(err => console.error("Error fetching song image:", err));
+      .then(blob => {
+        setSongImage(URL.createObjectURL(blob));
+      })
+      .catch(() => {
+        setSongImage("/images/default-cover.jpg");
+      });
   }, [currentSong]);
+
+  /** 🎶 Enable Marquee If Song Title is Clipped **/
+  const checkMarquee = () => {
+    if (titleRef.current && containerRef.current) {
+      setIsMarquee(titleRef.current.scrollWidth > containerRef.current.clientWidth);
+    }
+  };
+
+  useEffect(() => {
+    checkMarquee();
+    window.addEventListener("resize", checkMarquee);
+    return () => window.removeEventListener("resize", checkMarquee);
+  }, [currentSong]);
+
+  /** 🎵 Filter Song Title **/
+  const getFilteredSongTitle = () => {
+    return currentSong
+      .replace("/songs/", "")
+      .replace(".mp3", "")
+      .replace(/\[SPOTDOWNLOADER\.COM\]/g, "")
+      .trim();
+  };
 
   return (
     <div className={`app-container ${fadeIn ? "fade-in" : ""}`}>
@@ -124,25 +190,34 @@ function App() {
       {/* 🎶 MUSIC PLAYER */}
       <div className="music-player">
         <img src={songImage} alt="Song Cover" className="album-cover" />
-        <div className="music-info">
-          <p className="song-title">{currentSong.replace("/songs/", "").replace(".mp3", "")}</p>
+        <div className="music-info" ref={containerRef}>
+          <div className="marquee-wrapper">
+            {isMarquee ? (
+              <div className="marquee">
+                <span ref={titleRef}>{getFilteredSongTitle()}</span>
+              </div>
+            ) : (
+              <span ref={titleRef} className="no-marquee">
+                {getFilteredSongTitle()}
+              </span>
+            )}
+          </div>
         </div>
         <div className="controls">
+          <button onClick={playPrevious}>⏮</button>
           <button onClick={togglePlay}>{isPlaying ? "⏸" : "▶"}</button>
           <button onClick={playNext}>⏭</button>
+          <button
+            className={`repeat-btn ${repeat ? "repeat-active" : ""}`} 
+            onClick={() => setRepeat(!repeat)}
+            >
+            Repeat
+          </button>
         </div>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e) => setVolume(parseFloat(e.target.value))}
-          className="volume-slider"
-        />
+        <input type="range" min="0" max="1" step="0.01" value={volume} onChange={(e) => setVolume(parseFloat(e.target.value))} className="volume-slider" />
       </div>
 
-      <audio ref={audioRef} src={currentSong} onEnded={playNext} autoPlay />
+      <audio ref={audioRef} src={currentSong} onEnded={handleSongEnd} autoPlay />
     </div>
   );
 }

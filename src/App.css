@@ -43,77 +43,74 @@
   transition: opacity 1s ease-in-out;
 }
 
-/* 🎵 MUSIC PLAYER */
+/* 🎵 Music Player */
 .music-player {
   position: fixed;
   top: 15px;
   right: 15px;
-  background: rgba(20, 20, 20, 0.9);
-  padding: 12px;
+  background: rgba(20, 20, 20, 0.95);
+  padding: 12px 16px;
   border-radius: 8px;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   transition: all 0.3s ease-in-out;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  min-width: 180px;
+  min-width: 200px;
 }
 
-/* 🖼 ALBUM COVER */
+/* 🎵 Album Cover Scaling */
 .album-cover {
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
   object-fit: cover;
-  background-color: #222; /* Fallback background */
+  background-color: #222;
 }
 
-/* 🎶 SONG INFO */
+/* 🎶 Song Info */
 .music-info {
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
   color: white;
-  font-size: 12px;
-  max-width: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.music-info p {
-  margin: 0;
-  line-height: 1.2;
-}
-
-/* 🔘 CONTROLS */
+/* 🔘 Controls */
 .controls {
   display: flex;
   gap: 6px;
 }
 
+/* 🔘 Fix Button Scaling */
 .controls button {
   background: none;
   border: none;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
+  padding: 4px 6px;
 }
 
 .controls button:hover {
   opacity: 0.7;
 }
 
-/* 🔊 VOLUME SLIDER */
+
+/* 🔊 Volume Slider */
 .volume-slider {
   width: 60px;
   cursor: pointer;
   appearance: none;
   background: #666;
-  height: 5px;
-  border-radius: 5px;
+  height: 4px;
+  border-radius: 4px;
 }
 
 .volume-slider::-webkit-slider-thumb {
@@ -122,4 +119,44 @@
   height: 10px;
   background: white;
   border-radius: 50%;
+}
+
+/* 🔄 Repeat Button */
+.repeat-active {
+  color: #1db954; /* Spotify-like green when repeat is active */
+}
+
+.marquee-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+.marquee {
+  display: flex;
+  animation: scroll 8s linear infinite;
+  white-space: nowrap;
+  min-width: 100%;
+}
+
+@keyframes scroll {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+
+/* 🔄 Repeat Button Animation */
+.repeat-active {
+  color: #1db954; /* Spotify green */
+  transition: color 0.3s ease-in-out;
+  animation: glow 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0px 0px 5px #1db954;
+  }
+  to {
+    text-shadow: 0px 0px 10px #1db954;
+  }
 }

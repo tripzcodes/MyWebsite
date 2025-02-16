@@ -59,30 +59,33 @@ app.get("/api/metadata", async (req, res) => {
 
 // ✅ API to fetch embedded image separately
 app.get("/api/song-image", async (req, res) => {
-  try {
-    if (!req.query.file) {
-      return res.status(400).json({ error: "Missing file parameter" });
+    try {
+      if (!req.query.file) {
+        return res.status(400).json({ error: "Missing file parameter" });
+      }
+  
+      const filePath = path.join(__dirname, "public/songs", req.query.file);
+  
+      // Ensure file exists
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ error: "File not found" });
+      }
+  
+      const metadata = await mm.parseFile(filePath);
+      if (metadata.common.picture && metadata.common.picture.length > 0) {
+        const picture = metadata.common.picture[0]; // Get the first image
+        res.setHeader("Content-Type", picture.format); // Set correct image type
+        return res.send(Buffer.from(picture.data)); // Send the raw image data
+      } else {
+        return res.status(404).json({ error: "No embedded cover found" });
+      }
+    } catch (error) {
+      console.error("Error fetching song image:", error);
+      res.status(500).json({ error: "Error fetching song image" });
     }
-
-    const filePath = path.join(__dirname, "public/songs", req.query.file);
-
-    // Ensure file exists
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: "File not found" });
-    }
-
-    const metadata = await mm.parseFile(filePath);
-    if (metadata.common.picture && metadata.common.picture.length > 0) {
-      res.setHeader("Content-Type", "image/jpeg");
-      return res.send(metadata.common.picture[0].data);
-    } else {
-      return res.status(404).json({ error: "No embedded cover found" });
-    }
-  } catch (error) {
-    console.error("Error fetching song image:", error);
-    res.status(500).json({ error: "Error fetching song image" });
-  }
-});
+  });
+  
+  
 
 // ✅ Start Server
 app.listen(PORT, () => {
