@@ -94,11 +94,14 @@ function App() {
       try {
         const response = await fetch("http://localhost:3001/api/songs");
         const data = await response.json();
-        const mp3Files = data.slice(0, 50).map(file => `/songs/${file}`);
-        setSongs(mp3Files);
-
-        if (!currentSong && mp3Files.length > 0) {
-          const randomSong = mp3Files[Math.floor(Math.random() * mp3Files.length)];
+        
+        // ✅ Filter only valid .mp3 files
+        const filteredSongs = data.filter(song => song.toLowerCase().endsWith(".mp3"));
+        
+        setSongs(filteredSongs);
+  
+        if (!currentSong && filteredSongs.length > 0) {
+          const randomSong = filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
           setCurrentSong(randomSong);
           localStorage.setItem("lastSong", randomSong);
         }
@@ -106,9 +109,10 @@ function App() {
         console.error("Error fetching songs:", error);
       }
     };
-
+  
     fetchSongs();
-  }, [currentSong]);
+  }, []);
+  
 
   // ✅ Sync Volume with Local Storage & Audio Element
   useEffect(() => {
@@ -120,19 +124,21 @@ function App() {
   // ✅ Fetch Album Art for Current Song
   useEffect(() => {
     if (!currentSong) return;
-
+  
     const fetchAlbumArt = async () => {
+      const fileName = currentSong.split("/").pop(); // Extract the file name from the URL
+    
       try {
-        const response = await fetch(`http://localhost:3001/api/song-image?file=${encodeURIComponent(currentSong.replace("/songs/", ""))}`);
+        const response = await fetch(`http://localhost:3001/api/song-image?file=${encodeURIComponent(fileName)}`);
         if (!response.ok) throw new Error("No image found");
-
+    
         const blob = await response.blob();
         setSongImage(URL.createObjectURL(blob));
       } catch {
         setSongImage("/images/default-cover.jpg");
       }
     };
-
+  
     fetchAlbumArt();
   }, [currentSong]);
 
@@ -185,8 +191,19 @@ function App() {
   };
 
   // ✅ Improved Song Title Formatting
-  const getFilteredSongTitle = () =>
-    currentSong.replace("/songs/", "").replace(".mp3", "").replace(/\[SPOTDOWNLOADER\.COM\]/g, "").trim();
+  const getFilteredSongTitle = () => {
+    if (!currentSong) return "";
+    
+    // ✅ Extract only the filename
+    const songFilename = currentSong.split("/").pop();
+  
+    // ✅ Clean up the name (remove S3 URL and unnecessary text)
+    return songFilename
+      .replace(/\[SPOTDOWNLOADER\.COM\]/g, "") // Remove tag
+      .replace(".mp3", "") // Remove file extension
+      .replace(/_/g, " ") // Replace underscores with spaces (if any)
+      .trim(); // Remove any leading/trailing spaces
+  };
 
   return (
     <>

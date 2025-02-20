@@ -1,93 +1,94 @@
+require("dotenv").config();  // ✅ 1) Load .env at the top
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const mm = require("music-metadata");
+const AWS = require("aws-sdk");
 const cors = require("cors");
 
 const app = express();
 const PORT = 3001;
 
-app.use(cors()); // Allow React frontend to access backend
-app.use(express.static("public"));
+// ✅ 2) Debug log your env variables
+console.log("S3_BUCKET:", process.env.S3_BUCKET);
+console.log("SONGS_FOLDER:", process.env.SONGS_FOLDER);
 
-// ✅ API to fetch all song files
-app.get("/api/songs", (req, res) => {
-  const songsDir = path.join(__dirname, "public/songs");
+// ✅ 3) If S3_BUCKET is missing, throw an error to help debug
+if (!process.env.S3_BUCKET) {
+  console.error("❌ S3_BUCKET not defined in .env!");
+  process.exit(1);
+}
 
-  fs.readdir(songsDir, (err, files) => {
-    if (err) {
-      console.error("Error reading songs directory:", err);
-      return res.status(500).json({ error: "Failed to read directory" });
-    }
+// ✅ 4) Allow React frontend to access backend
+app.use(cors({ origin: "http://localhost:3000" }));
 
-    const mp3Files = files.filter(file => file.endsWith(".mp3"));
-    res.json(mp3Files);
-  });
+// ✅ 5) Load AWS credentials from .env
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
 });
 
-// ✅ API to fetch metadata (title, album, cover image)
-app.get("/api/metadata", async (req, res) => {
+const s3 = new AWS.S3();
+
+// ✅ 6) API to fetch all songs dynamically
+app.get("/api/songs", async (req, res) => {
+  try {
+    const params = {
+      Bucket: process.env.S3_BUCKET,
+      Prefix: process.env.SONGS_FOLDER,
+    };
+
+    const data = await s3.listObjectsV2(params).promise();
+
+    // Build array of full S3 URLs that end with .mp3
+    const songUrls = data.Contents.map(file =>
+      `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.Key}`
+    ).filter(url => url.endsWith(".mp3"));
+
+    res.json(songUrls);
+  } catch (error) {
+    console.error("❌ Error fetching songs:", error);
+    res.status(500).json({ error: "Failed to retrieve songs" });
+  }
+});
+
+// ✅ 7) API to fetch the song's cover image from S3
+app.get("/api/song-image", async (req, res) => {
   try {
     if (!req.query.file) {
       return res.status(400).json({ error: "Missing file parameter" });
     }
 
-    const filePath = path.join(__dirname, "public/songs", req.query.file);
+    const fileName = req.query.file;
+    // Add the "songs/" prefix if your S3 objects live there
+    const fullKey = `${process.env.SONGS_FOLDER}${fileName}`;
 
-    // Ensure file exists
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: "File not found" });
-    }
+    const params = {
+      Bucket: process.env.S3_BUCKET,
+      Key: fullKey,
+    };
 
-    const metadata = await mm.parseFile(filePath);
-    let coverBase64 = null;
+    // Download the file from S3
+    const s3Object = await s3.getObject(params).promise();
+
+    // Parse the embedded metadata
+    const metadata = await mm.parseBuffer(s3Object.Body);
 
     if (metadata.common.picture && metadata.common.picture.length > 0) {
-      coverBase64 = metadata.common.picture[0].data.toString("base64");
+      const picture = metadata.common.picture[0];
+      res.setHeader("Content-Type", picture.format);
+      return res.send(Buffer.from(picture.data));
+    } else {
+      return res.status(404).json({ error: "No embedded cover found" });
     }
-
-    res.json({
-      title: metadata.common.title || req.query.file.replace(".mp3", ""),
-      album: metadata.common.album || "Unknown Album",
-      cover: coverBase64,
-    });
   } catch (error) {
-    console.error("Error reading metadata:", error);
-    res.status(500).json({ error: "Error reading metadata" });
+    console.error("❌ Error fetching song image:", error);
+    res.status(500).json({ error: "Error fetching song image" });
   }
 });
 
-// ✅ API to fetch embedded image separately
-app.get("/api/song-image", async (req, res) => {
-    try {
-      if (!req.query.file) {
-        return res.status(400).json({ error: "Missing file parameter" });
-      }
-  
-      const filePath = path.join(__dirname, "public/songs", req.query.file);
-  
-      // Ensure file exists
-      if (!fs.existsSync(filePath)) {
-        return res.status(404).json({ error: "File not found" });
-      }
-  
-      const metadata = await mm.parseFile(filePath);
-      if (metadata.common.picture && metadata.common.picture.length > 0) {
-        const picture = metadata.common.picture[0]; // Get the first image
-        res.setHeader("Content-Type", picture.format); // Set correct image type
-        return res.send(Buffer.from(picture.data)); // Send the raw image data
-      } else {
-        return res.status(404).json({ error: "No embedded cover found" });
-      }
-    } catch (error) {
-      console.error("Error fetching song image:", error);
-      res.status(500).json({ error: "Error fetching song image" });
-    }
-  });
-  
-  
-
-// ✅ Start Server
+// ✅ 8) Start Server
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
