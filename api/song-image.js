@@ -24,6 +24,6 @@ export default async function handler(req, res) {
     }
   } catch (error) {
     console.error("❌ Error fetching song image:", error);
-    res.status(500).json({ error: "Error fetching song image" });
+    res.status(500).json({ error: "Error fetching song image " });
   }
 }
