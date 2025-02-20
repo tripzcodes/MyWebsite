@@ -1,4 +1,4 @@
-/* 🔥 Minimalist Layout */
+/* 🔥 General Layout */
 .about-container {
     display: flex;
     flex-direction: column;
@@ -6,19 +6,22 @@
     justify-content: center;
     height: 100vh;
     padding: 20px;
-    background-color: #0d0d0d;
-    color: white;
+    background-color: rgba(0, 0, 0, 0.6); /* ✅ Matches Home Page */
+    backdrop-filter: blur(2px); /* ✅ Reduced Blur for WebGL Visibility */
+    color: #e0e0e0; /* Softer white */
     font-family: "Inter", sans-serif;
     text-align: center;
+    position: relative;
 }
 
-/* 🔥 Title */
+/* 🔥 Title with Subtle Glow */
 .about-title {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     font-weight: 700;
-    color: white;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
     margin-bottom: 10px;
-    animation: fadeIn 0.8s ease-in-out forwards;
 }
 
 /* 🔥 Subtle Divider */

@@ -2,27 +2,30 @@ import { useState, useEffect, useRef } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 import About from "./About/About.js";
+import BackgroundRenderer from "./BackgroundRenderer.js";
+import Projects from "./projects/Projects.js";
 
 function MainPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [fadeIn, setFadeIn] = useState(false);
-  const [showDialogue, setShowDialogue] = useState(false);
+  // const [skipIntro, setSkipIntro] = useState(false);
+  const [showButtons, setShowButtons] = useState(false);
   const [dialogueIndex, setDialogueIndex] = useState(0);
   const [isFadingOut, setIsFadingOut] = useState(true);
-  const [showButtons, setShowButtons] = useState(false);
+  const [showDialogue, setShowDialogue] = useState(false);
 
-  const dialogueLines = ["hello", "welcome to my world"];
+  const dialogueLines = ["Hello.", "Welcome to my world."];
 
   useEffect(() => {
-    document.body.style.backgroundColor = "#000"; // Ensure correct background color for home
+    document.body.style.background = "transparent"; // ✅ Keeps WebGL visible
 
-    if (location.state?.skipIntro) {
+    if (location.state?.skipIntro || sessionStorage.getItem("skipIntro") === "true") {
       setShowButtons(true);
       return;
     }
 
-    setFadeIn(true);
+    sessionStorage.setItem("skipIntro", "true"); // ✅ Save state across pages
+
     let timeouts = [];
 
     const sequence = [
@@ -38,15 +41,13 @@ function MainPage() {
       },
     ];
 
-    sequence.forEach((fn, i) => {
-      timeouts.push(setTimeout(fn, i * 2000));
-    });
+    sequence.forEach((fn, i) => timeouts.push(setTimeout(fn, i * 1000)));
 
     return () => timeouts.forEach(clearTimeout);
   }, [location.state]);
 
   return (
-    <div className={`app-container ${fadeIn ? "fade-in" : ""}`}>
+    <div className="app-container">
       {showDialogue && (
         <div className="dialogue-box">
           <p className={`dialogue-text ${isFadingOut ? "fade-out" : "fade-in-text"}`}>
@@ -58,7 +59,7 @@ function MainPage() {
       {showButtons && (
         <div className="home-container">
           <div className="button-container">
-            <button onClick={() => navigate("/projects")}>Projects</button>
+            <button onClick={() => navigate("/projects", { state: { skipIntro: true } })}>Projects</button>
             <button onClick={() => navigate("/discussions")}>Discussions</button>
             <button onClick={() => navigate("/about", { state: { skipIntro: true } })}>About Me</button>
           </div>
@@ -77,6 +78,8 @@ function App() {
   const [repeat, setRepeat] = useState(false);
   const [songHistory, setSongHistory] = useState([]);
   const [songImage, setSongImage] = useState("/images/default-cover.jpg");
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(1);
 
   const audioRef = useRef(null);
 
@@ -85,16 +88,15 @@ function App() {
     document.body.style.backgroundColor = location.pathname === "/about" ? "#0d0d0d" : "#000";
   }, [location.pathname]);
 
-  // ✅ Fetch Song List (Prevents Unnecessary Calls)
+  // ✅ Fetch Song List Once
   useEffect(() => {
     const fetchSongs = async () => {
       try {
         const response = await fetch("http://localhost:3001/api/songs");
         const data = await response.json();
-  
         const mp3Files = data.slice(0, 50).map(file => `/songs/${file}`);
         setSongs(mp3Files);
-  
+
         if (!currentSong && mp3Files.length > 0) {
           const randomSong = mp3Files[Math.floor(Math.random() * mp3Files.length)];
           setCurrentSong(randomSong);
@@ -104,9 +106,9 @@ function App() {
         console.error("Error fetching songs:", error);
       }
     };
-  
+
     fetchSongs();
-  }, [setSongs]); // ✅ Now setSongs is properly used
+  }, [currentSong]);
 
   // ✅ Sync Volume with Local Storage & Audio Element
   useEffect(() => {
@@ -115,7 +117,7 @@ function App() {
     localStorage.setItem("volume", volume);
   }, [volume]);
 
-  // ✅ Fetch Album Art for Current Song (Fixed Warning)
+  // ✅ Fetch Album Art for Current Song
   useEffect(() => {
     if (!currentSong) return;
 
@@ -126,13 +128,26 @@ function App() {
 
         const blob = await response.blob();
         setSongImage(URL.createObjectURL(blob));
-      } catch (error) {
+      } catch {
         setSongImage("/images/default-cover.jpg");
       }
     };
 
     fetchAlbumArt();
-  }, [currentSong]); // ✅ `currentSong` is now correctly included in dependencies
+  }, [currentSong]);
+
+  // ✅ Real-time Progress Bar Update
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    const updateProgress = () => {
+      setCurrentTime(audioRef.current.currentTime);
+      setDuration(audioRef.current.duration || 1);
+    };
+
+    const interval = setInterval(updateProgress, 1000);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   const playNext = () => {
     if (songs.length > 0) {
@@ -175,12 +190,14 @@ function App() {
 
   return (
     <>
+      {/* 🔥 Add Background WebGL Renderer */}
+      <BackgroundRenderer />
       {/* 🔥 Persistent Music Player */}
       <div className="music-player">
         <img src={songImage} alt="Song Cover" className="album-cover" />
 
         <div className="progress-bar-container">
-          <progress className="progress-bar" value={audioRef.current?.currentTime || 0} max={audioRef.current?.duration || 1} />
+          <progress className="progress-bar" value={currentTime} max={duration} />
         </div>
 
         <div className="music-info">
@@ -191,23 +208,12 @@ function App() {
           <button onClick={playPrevious}>⏮</button>
           <button onClick={togglePlay}>{isPlaying ? "⏸" : "▶"}</button>
           <button onClick={playNext}>⏭</button>
-          <button
-            className={`repeat-btn ${repeat ? "repeat-active" : "repeat-inactive"}`}
-            onClick={() => setRepeat(prev => !prev)}
-          >
+          <button className={`repeat-btn ${repeat ? "repeat-active" : "repeat-inactive"}`} onClick={() => setRepeat(!repeat)}>
             Repeat
           </button>
         </div>
 
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={e => setVolume(parseFloat(e.target.value))}
-          className="volume-slider"
-        />
+        <input type="range" min="0" max="1" step="0.01" value={volume} onChange={e => setVolume(parseFloat(e.target.value))} className="volume-slider" />
       </div>
 
       <audio ref={audioRef} src={currentSong} onEnded={handleSongEnd} autoPlay />
@@ -216,6 +222,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/about" element={<About />} />
+        <Route path="/projects" element={<Projects />} /> {/* ✅ Added Projects Route */}
       </Routes>
     </>
   );

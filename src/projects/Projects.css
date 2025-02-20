@@ -1,0 +1,166 @@
+/* 🔥 Matches About Page */
+.projects-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-color: rgba(0, 0, 0, 0.6); /* ✅ Matches Other Pages */
+    backdrop-filter: blur(2px); /* ✅ Keeps WebGL Visible */
+    color: #e0e0e0;
+    font-family: "Inter", sans-serif;
+    text-align: left;
+    position: relative;
+    opacity: 0; /* Starts hidden to prevent white flash */
+}
+
+/* ✅ Ensures fade-in applies instantly on component mount */
+.fade-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    animation: fadeIn 0.8s ease-in-out forwards;
+}
+
+/* 🔥 Ensures everything fades in smoothly */
+.projects-container * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.8s ease-in-out forwards;
+}
+
+/* ✅ Prevent any unintended animation delays */
+.projects-list,
+.projects-container h1,
+.project-item {
+    animation-delay: 0s !important;
+}
+
+/* 🔥 Fade-in Effect */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 🔥 Home Button */
+.home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: 2px solid white;
+    color: white;
+    font-size: 16px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.home-button:hover {
+    background: white;
+    color: black;
+}
+
+/* 🔥 Title Styling */
+.projects-container h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #e0e0e0;
+    text-align: center;
+    text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.15);
+    margin-bottom: 25px;
+}
+
+/* 🔥 Project List */
+.projects-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    max-width: 750px;
+}
+
+/* 🔥 Project Items */
+.project-item {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: background 0.3s ease-in-out;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.8s ease-in-out forwards 0.2s; /* ✅ Delayed fade-in */
+}
+
+.project-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* 🔥 Project Title */
+.project-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #e0e0e0;
+}
+
+/* 🔥 Project Date & Source Code */
+.project-meta {
+    font-size: 14px;
+    color: #bdbdbd;
+    margin: 5px 0;
+}
+
+/* 🔥 Source Code Link */
+.source-code {
+    color: #ff6666;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.source-code:hover {
+    text-decoration: underline;
+}
+
+/* 🔥 Description */
+.project-item p {
+    font-size: 15px;
+    color: #c0c0c0;
+    margin-top: 8px;
+    line-height: 1.6;
+}
+
+/* 🔥 Loading & Error Messages */
+.loading,
+.error {
+    font-size: 18px;
+    color: #ff6f61;
+    text-align: center;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards; /* ✅ Loading text fades in smoothly */
+}
+
+/* 🔥 Responsive Tweaks */
+@media (max-width: 768px) {
+    .projects-container {
+        padding: 20px;
+    }
+
+    .projects-list {
+        width: 100%;
+    }
+
+    .home-button {
+        top: 15px;
+        left: 15px;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+}
