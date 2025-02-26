@@ -88,16 +88,16 @@ function App() {
     document.body.style.backgroundColor = location.pathname === "/about" ? "#0d0d0d" : "#000";
   }, [location.pathname]);
 
+  const API_BASE_URL = "https://websitebackend-production-ddda.up.railway.app";
+
   // ✅ Fetch Song List Once
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/songs");
+        const response = await fetch(`${API_BASE_URL}/api/songs`);
         const data = await response.json();
-        
-        // ✅ Filter only valid .mp3 files
+    
         const filteredSongs = data.filter(song => song.toLowerCase().endsWith(".mp3"));
-        
         setSongs(filteredSongs);
   
         if (!currentSong && filteredSongs.length > 0) {
@@ -112,6 +112,24 @@ function App() {
   
     fetchSongs();
   }, []);
+
+
+  useEffect(() => {
+    if (currentSong && audioRef.current) {
+      audioRef.current.src = currentSong;
+      audioRef.current
+        .play()
+        .then(() => {
+          console.log("✅ Autoplay started successfully");
+          setIsPlaying(true); // ✅ Update UI only if it actually plays
+        })
+        .catch(err => {
+          console.warn("❌ Autoplay blocked by browser:", err);
+          setIsPlaying(false); // ✅ Show Play button if autoplay is blocked
+        });
+    }
+  }, [currentSong]);
+
   
 
   // ✅ Sync Volume with Local Storage & Audio Element
@@ -122,25 +140,42 @@ function App() {
   }, [volume]);
 
   // ✅ Fetch Album Art for Current Song
-  useEffect(() => {
+  const fetchAlbumArt = async () => {
     if (!currentSong) return;
   
-    const fetchAlbumArt = async () => {
-      const fileName = currentSong.split("/").pop(); // Extract the file name from the URL
-    
-      try {
-        const response = await fetch(`http://localhost:3001/api/song-image?file=${encodeURIComponent(fileName)}`);
-        if (!response.ok) throw new Error("No image found");
-    
-        const blob = await response.blob();
-        setSongImage(URL.createObjectURL(blob));
-      } catch {
-        setSongImage("/images/default-cover.jpg");
-      }
-    };
+    const fileName = currentSong.split("/").pop();
+    console.log(`🎵 Fetching album art for: ${fileName}`);
   
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/song-image?file=${encodeURIComponent(fileName)}`);
+      console.log(`📡 Request sent: ${API_BASE_URL}/api/song-image?file=${encodeURIComponent(fileName)}`);
+  
+      if (!response.ok) throw new Error("❌ No image found");
+  
+      const blob = await response.blob();
+      console.log(`✅ Image received! Size: ${blob.size} bytes`);
+  
+      const imageUrl = URL.createObjectURL(blob);
+      console.log(`🔗 Generated Image URL: ${imageUrl}`);
+  
+      setSongImage(imageUrl);
+  
+      // ⏩ Test if the image is loading
+      const img = new Image();
+      img.src = imageUrl;
+      img.onload = () => console.log("✅ Image loaded successfully");
+      img.onerror = () => console.error("❌ Error loading image");
+    } catch (error) {
+      console.error("❌ Error fetching album art:", error);
+      setSongImage("/images/default-cover.jpg");
+    }
+  };
+
+  useEffect(() => {
+    console.log("🔄 Song changed, attempting to fetch album art...");
     fetchAlbumArt();
-  }, [currentSong]);
+  }, [currentSong]); // ✅ Runs every time `currentSong` updates
+  
 
   // ✅ Real-time Progress Bar Update
   useEffect(() => {
@@ -154,6 +189,8 @@ function App() {
     const interval = setInterval(updateProgress, 1000);
     return () => clearInterval(interval);
   }, [isPlaying]);
+
+  
 
   const playNext = () => {
     if (songs.length > 0) {
@@ -177,8 +214,16 @@ function App() {
 
   const togglePlay = () => {
     if (!audioRef.current) return;
-    isPlaying ? audioRef.current.pause() : audioRef.current.play().catch(() => console.warn("Playback error"));
-    setIsPlaying(!isPlaying);
+  
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true)) // ✅ Only update if play is successful
+        .catch(() => console.warn("❌ Playback error"));
+    }
   };
 
   const handleSongEnd = () => {
@@ -223,7 +268,9 @@ function App() {
 
         <div className="controls">
           <button onClick={playPrevious}>⏮</button>
-          <button onClick={togglePlay}>{isPlaying ? "⏸" : "▶"}</button>
+          <button onClick={togglePlay}>
+            {isPlaying ? "⏸" : "▶"}
+          </button>
           <button onClick={playNext}>⏭</button>
           <button className={`repeat-btn ${repeat ? "repeat-active" : "repeat-inactive"}`} onClick={() => setRepeat(!repeat)}>
             Repeat
