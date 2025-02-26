@@ -88,7 +88,7 @@ function App() {
     document.body.style.backgroundColor = location.pathname === "/about" ? "#0d0d0d" : "#000";
   }, [location.pathname]);
 
-  const API_BASE_URL = "https://websitebackend-production-ddda.up.railway.app";
+  const API_BASE_URL = "https://websitebackend-production-d425.up.railway.app";
 
   // ✅ Fetch Song List Once
   useEffect(() => {
@@ -117,16 +117,9 @@ function App() {
   useEffect(() => {
     if (currentSong && audioRef.current) {
       audioRef.current.src = currentSong;
-      audioRef.current
-        .play()
-        .then(() => {
-          console.log("✅ Autoplay started successfully");
-          setIsPlaying(true); // ✅ Update UI only if it actually plays
-        })
-        .catch(err => {
-          console.warn("❌ Autoplay blocked by browser:", err);
-          setIsPlaying(false); // ✅ Show Play button if autoplay is blocked
-        });
+      audioRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(() => setIsPlaying(false));
     }
   }, [currentSong]);
 
@@ -172,9 +165,8 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("🔄 Song changed, attempting to fetch album art...");
     fetchAlbumArt();
-  }, [currentSong]); // ✅ Runs every time `currentSong` updates
+  }, [currentSong]);
   
 
   // ✅ Real-time Progress Bar Update
