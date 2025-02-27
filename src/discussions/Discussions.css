@@ -108,6 +108,8 @@
     cursor: pointer;
     transition: color 0.2s ease-in-out;
     padding: 5px 10px;
+    z-index: 9999;
+
 }
 
 .close-button:hover {
