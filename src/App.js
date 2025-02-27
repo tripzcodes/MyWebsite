@@ -4,6 +4,7 @@ import "./App.css";
 import About from "./About/About.js";
 import BackgroundRenderer from "./BackgroundRenderer.js";
 import Projects from "./projects/Projects.js";
+import Discussions from "./discussions/Discussions.js";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -278,7 +279,8 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} /> {/* ✅ Added Projects Route */}
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/discussions" element={<Discussions />} /> 
       </Routes>
     </>
   );
