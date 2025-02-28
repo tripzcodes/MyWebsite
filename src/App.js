@@ -88,7 +88,7 @@ function App() {
     document.body.style.backgroundColor = location.pathname === "/about" ? "#0d0d0d" : "#000";
   }, [location.pathname]);
 
-  const API_BASE_URL = "https://websitebackend-production-d425.up.railway.app";
+  const API_BASE_URL = process.env.REACT_APP_BACKEND_API;
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -133,7 +133,6 @@ function App() {
     if (!currentSong) return;
   
     const fileName = currentSong.split("/").pop();
-    console.log(`🎵 Fetching album art for: ${fileName}`);
   
     try {
       const response = await fetch(`${API_BASE_URL}/api/song-image?file=${encodeURIComponent(fileName)}`);
@@ -142,7 +141,6 @@ function App() {
       const blob = await response.blob();
   
       const imageUrl = URL.createObjectURL(blob);
-      console.log(`🔗 Generated Image URL: ${imageUrl}`);
   
       setSongImage(imageUrl);
   

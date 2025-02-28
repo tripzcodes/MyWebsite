@@ -44,8 +44,6 @@ function Discussions() {
     }
   }, [currentPost]);
 
-  
-
   const loadPost = async (file, title) => {
     setLoading(true);
     setSelectedTitle(title);
@@ -75,19 +73,24 @@ function Discussions() {
 
       {currentPost ? (
         <div className="post-wrapper">
-          <div className="post-viewer">
-            <button className="close-button" onClick={closePost}>
+        <div className="post-viewer">
+          
+          <div className="post-header-container">
+              <h2 className="post-header">{selectedTitle}</h2>
+            <button className="close-button" onClick={closePost} aria-label="Close Post">
               ✖ Close
             </button>
-            <h2 className="post-header">{selectedTitle}</h2>
-            <ReactMarkdown
-              remarkPlugins={[remarkMath]}
-              rehypePlugins={[rehypeKatex, rehypeHighlight]}
-            >
-              {currentPost}
-            </ReactMarkdown>
           </div>
+      
+          <ReactMarkdown
+            remarkPlugins={[remarkMath]}
+            rehypePlugins={[rehypeKatex, rehypeHighlight]}
+          >
+            {currentPost}
+          </ReactMarkdown>
         </div>
+      </div>
+      
       ) : (
         <>
           <h1 className="discussions-title">Discussions</h1>

@@ -14,6 +14,24 @@
     opacity: 0;
 }
 
+.post-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.post-header {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: left;
+    margin: 0;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .fade-in {
     opacity: 1 !important;
     transform: translateY(0) !important;
@@ -95,31 +113,29 @@
     position: relative;
 }
 
-/* Close Button */
 .close-button {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
+    background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #999;
-    font-size: 18px;
+    color: #bbb;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
-    transition: color 0.2s ease-in-out;
-    padding: 5px 10px;
-    z-index: 9999;
-
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
 }
+
+/* Hover Effect */
+.close-button:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
 
 .close-button:hover {
     color: white;
 }
 
-.post-header {
-    font-size: 1.8rem;
-    color: #ff6666;
-    margin-bottom: 10px;
-}
 
 .post-viewer pre,
 .post-viewer pre code {
