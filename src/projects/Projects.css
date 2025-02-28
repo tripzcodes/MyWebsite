@@ -13,6 +13,9 @@
     position: relative;
     opacity: 0;
     will-change: transform, backdrop-filter;
+    overflow-y: auto;
+    max-height: 100vh;
+    scroll-behavior: smooth;
 }
 
 .fade-in {

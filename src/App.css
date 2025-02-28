@@ -32,6 +32,9 @@
   text-align: center;
   position: relative;
   will-change: transform, backdrop-filter;
+  overflow-y: auto;
+  max-height: 100vh;
+  scroll-behavior: smooth;
 }
 
 
@@ -488,4 +491,10 @@ button:active {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+html, body {
+  overflow: hidden;
+  height: 100%;
+  overscroll-behavior: contain;
 }

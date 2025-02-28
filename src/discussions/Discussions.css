@@ -12,6 +12,9 @@
     position: relative;
     opacity: 0;
     backdrop-filter: blur(var(--blur-intensity));
+    overflow-y: auto;
+    max-height: 100vh;
+    scroll-behavior: smooth;
 }
 
 .post-header-container {

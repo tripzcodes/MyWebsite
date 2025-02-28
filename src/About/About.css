@@ -12,6 +12,9 @@
     text-align: center;
     position: relative;
     will-change: transform, backdrop-filter;
+    overflow-y: auto;
+    max-height: 100vh;
+    scroll-behavior: smooth;
 }
 
 .about-title {
