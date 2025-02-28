@@ -43,7 +43,7 @@
   align-items: center;
   text-align: center;
   opacity: 1;
-  animation: fadeIn 1.2s ease-in-out; /* ✅ Slightly faster fade-in */
+  animation: fadeIn 1.2s ease-in-out;
   z-index: 2;
   position: relative;
 }
@@ -51,7 +51,7 @@
 
 .fade-in {
   opacity: 1;
-  background-color: rgba(0, 0, 0, 0.6) !important; /* ✅ Fixed to match About Page */
+  background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .home-title {
@@ -64,7 +64,6 @@
 }
 
 
-/* 🎯 Button Container */
 .button-container {
   display: flex;
   gap: 20px;

@@ -127,7 +127,6 @@
     transition: all 0.2s ease-in-out;
 }
 
-/* Hover Effect */
 .close-button:hover {
     color: white;
     background: rgba(255, 255, 255, 0.2);

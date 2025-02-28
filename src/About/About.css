@@ -60,9 +60,11 @@
 
 .typing-text, .typed-text {
     font-size: 17px;
-    text-align: left;
-    margin-top: 15px;
+    text-align: center;
+    margin: 15px auto;
     color: #ccc;
+    max-width: 550px;
+    word-wrap: break-word;
 }
 
 .cursor {
@@ -147,6 +149,11 @@
         font-size: 15px;
     }
 
+    .typing-text, .typed-text {
+        font-size: 16px;
+        max-width: 90%;
+    }
+
     .social-links {
         gap: 15px;
     }
@@ -170,6 +177,11 @@
 
     .about-content {
         font-size: 14px;
+    }
+
+    .typing-text, .typed-text {
+        font-size: 15px;
+        max-width: 95%;
     }
 
     .social-links {
