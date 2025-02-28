@@ -423,7 +423,7 @@ button:active {
 
 @media (min-resolution: 2dppx){
   :root{
-    --blur-intensity: 1.5px;
+    --blur-intensity: 0.5px;
   }
 }
 
