@@ -28,12 +28,10 @@ Now, I'm a developer known as tripzcodes, an aspiring game dev mainly coding in 
 
   return (
     <div className="about-container">
-      {/* 🔥 Home Button */}
       <button className="home-button" onClick={() => navigate("/", { state: { skipIntro: true } })}>
         ⬅ Home
       </button>
 
-      {/* 🔥 About Content */}
       <div className="about-content">
         <h1 className="about-title">About Me</h1>
         <div className="divider"></div>
@@ -42,7 +40,6 @@ Now, I'm a developer known as tripzcodes, an aspiring game dev mainly coding in 
           {!doneTyping && <span className="cursor">|</span>}
         </p>
 
-        {/* 🔗 Social Media Links */}
         <div className="social-links">
           <a href="https://x.com/tripz_cs" target="_blank" rel="noopener noreferrer" className="social-icon">
             <FaTwitter />

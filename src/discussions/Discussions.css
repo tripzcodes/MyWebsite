@@ -82,7 +82,6 @@
     color: #bdbdbd;
 }
 
-/* Markdown Viewer */
 .post-viewer {
     max-width: 750px;
     margin: 40px auto;
@@ -128,20 +127,24 @@
     padding: 12px;
     border-radius: 8px;
     overflow-x: auto;
-    font-family: "Fira Code", "Courier New", monospace;
-    font-size: 0.95rem;
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", "Courier New", monospace;
+    font-size: 0.9rem;
+    letter-spacing: -0.3px;
+    line-height: 1.6;
     color: #f8f8f2;
     white-space: pre;
     word-wrap: normal;
+    font-variant-ligatures: none;
 }
 
+
 .post-viewer code {
-    color: #ff6666;
-    padding: 3px 6px;
-    border-radius: 4px;
-    font-family: "Fira Code", "Courier New", monospace;
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", "Courier New", monospace;
     font-size: 0.95rem;
+    letter-spacing: -0.3px;
+    line-height: 1.6;
     color: #ffcc99;
+    font-variant-ligatures: none;
 }
 
 .post-viewer code:contains("(") {

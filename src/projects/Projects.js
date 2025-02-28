@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Import for navigation
+import { useNavigate } from "react-router-dom";
 import "./Projects.css";
 
 function Projects() {
@@ -7,10 +7,10 @@ function Projects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [fadeIn, setFadeIn] = useState(false); // ✅ New state for instant fade-in
+  const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
-    setFadeIn(true); // ✅ Trigger fade-in as soon as component mounts
+    setFadeIn(true);
 
     const fetchRepos = async () => {
       try {
@@ -31,7 +31,6 @@ function Projects() {
 
   return (
     <div className={`projects-container ${fadeIn ? "fade-in" : ""}`}>
-      {/* ✅ Home Button */}
       <button className="home-button" onClick={() => navigate("/")}>
         ⬅ Home
       </button>

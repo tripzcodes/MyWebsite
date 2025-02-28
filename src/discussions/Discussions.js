@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import rehypeHighlight from "rehype-highlight"; // Enables syntax highlighting
+import rehypeHighlight from "rehype-highlight";
 import yaml from "js-yaml";
 import "katex/dist/katex.min.css";
-import "highlight.js/styles/atom-one-dark.css"; // Import dark theme
+import "highlight.js/styles/atom-one-dark.css"; 
 import "./Discussions.css";
 import { useNavigate } from "react-router-dom";
 
@@ -34,14 +34,13 @@ function Discussions() {
       });
   }, []);
 
-  // Force scrollbar styles to be applied when a post loads
   useEffect(() => {
     if (currentPost) {
       setTimeout(() => {
         document.querySelectorAll("pre").forEach((el) => {
           el.classList.add("custom-scrollbar");
         });
-      }, 100); // Small delay to allow rendering
+      }, 100);
     }
   }, [currentPost]);
 
