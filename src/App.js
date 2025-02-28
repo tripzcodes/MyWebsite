@@ -139,7 +139,6 @@ function App() {
   
     try {
       const response = await fetch(`${API_BASE_URL}/api/song-image?file=${encodeURIComponent(fileName)}`);
-      console.log(`📡 Request sent: ${API_BASE_URL}/api/song-image?file=${encodeURIComponent(fileName)}`);
     
       const blob = await response.blob();
   
