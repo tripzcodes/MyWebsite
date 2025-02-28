@@ -3,7 +3,7 @@
 This is my personal website, where I showcase my projects, document my work, and share insights through my blog.
 
 ## Live Website
-[Visit my portfolio](#) *(Update with actual link soon)*
+[Visit my portfolio](tripz.cc)
 
 ---
 
@@ -23,8 +23,8 @@ To run the website locally:
 
 ### 1. Clone the Repository
 ```sh
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/tripzcodes/MyWebsite.git
+cd MyWebsite
 ```
 
 ### 2. Install Dependencies
