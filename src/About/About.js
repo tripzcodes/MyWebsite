@@ -29,7 +29,7 @@ Now, I'm a developer known as tripzcodes, an aspiring game dev mainly coding in 
   return (
     <div className="about-container">
       <button className="home-button" onClick={() => navigate("/", { state: { skipIntro: true } })}>
-        ⬅ Home
+        Home
       </button>
 
       <div className="about-content">

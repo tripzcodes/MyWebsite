@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Play, Pause, SkipForward, SkipBack, Repeat, Music } from "lucide-react";
 import "./App.css";
 import About from "./About/About.js";
 import BackgroundRenderer from "./BackgroundRenderer.js";
@@ -81,6 +82,8 @@ function App() {
   const [songImage, setSongImage] = useState("/images/default-cover.jpg");
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(1);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const timeoutRef = useRef(null);
 
   const audioRef = useRef(null);
 
@@ -200,7 +203,7 @@ function App() {
       audioRef.current
         .play()
         .then(() => setIsPlaying(true))
-        .catch(() => console.warn("❌ Playback error"));
+        .catch(() => console.warn("Playback error"));
     }
   };
 
@@ -225,41 +228,93 @@ function App() {
       .trim();
   };
 
+  const resetTimer = () => {
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setIsMinimized(true);
+    }, 5000); 
+  };
+  
+  useEffect(() => {
+    const handleInteraction = (event) => {
+      if (event.target.closest(".music-player")) {
+        setIsMinimized(false);
+        resetTimer();
+      }
+    };
+  
+    document.addEventListener("click", handleInteraction);
+    resetTimer();
+  
+    return () => {
+      document.removeEventListener("click", handleInteraction);
+      clearTimeout(timeoutRef.current);
+    };
+  }, [isMinimized]);
+  
+
   return (
     <>
       <BackgroundRenderer />
-      <div className="music-player">
-        <img src={songImage} alt="Song Cover" className="album-cover" />
-
-        <div className="progress-bar-container">
-          <progress className="progress-bar" value={currentTime} max={duration} />
-        </div>
-
-        <div className="music-info">
-          <span>{getFilteredSongTitle()}</span>
-        </div>
-
-        <div className="controls">
-          <button onClick={playPrevious}>⏮</button>
-          <button onClick={togglePlay}>
-            {isPlaying ? "⏸" : "▶"}
-          </button>
-          <button onClick={playNext}>⏭</button>
-          <button className={`repeat-btn ${repeat ? "repeat-active" : "repeat-inactive"}`} onClick={() => setRepeat(!repeat)}>
-            Repeat
-          </button>
-        </div>
-
-        <input type="range" min="0" max="1" step="0.01" value={volume} onChange={e => setVolume(parseFloat(e.target.value))} className="volume-slider" />
+  
+      <div
+        className={`music-player ${isMinimized ? "minimized" : ""}`}
+        onClick={() => setIsMinimized(false)}
+      >
+        {!isMinimized ? (
+          <>
+            <img src={songImage} alt="Song Cover" className="album-cover" />
+  
+            <div className="progress-bar-container">
+              <progress className="progress-bar" value={currentTime} max={duration} />
+            </div>
+  
+            <div className="music-info">
+              <span>{getFilteredSongTitle()}</span>
+            </div>
+  
+            <div className="controls">
+              <button onClick={playPrevious}>
+                <SkipBack size={20} />
+              </button>
+              <button onClick={togglePlay}>
+                {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+              </button>
+              <button onClick={playNext}>
+                <SkipForward size={20} />
+              </button>
+              <button
+                className={`repeat-btn ${repeat ? "repeat-active" : ""}`}
+                onClick={() => setRepeat(!repeat)}
+              >
+                <Repeat size={20} />
+              </button>
+            </div>
+  
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              onChange={(e) => setVolume(parseFloat(e.target.value))}
+              className="volume-slider"
+            />
+          </>
+        ) : (
+          <div className="mini-player">
+            <Music size={24} />
+          </div>
+        )}
       </div>
-
+  
       <audio ref={audioRef} src={currentSong} onEnded={handleSongEnd} autoPlay />
-
+  
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/discussions" element={<Discussions />} /> 
+        <Route path="/discussions" element={<Discussions />} />
       </Routes>
     </>
   );

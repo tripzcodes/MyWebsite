@@ -9,6 +9,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "js-yaml": "^4.1.0",
+    "lucide-react": "^0.476.0",
     "music-metadata": "^10.9.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

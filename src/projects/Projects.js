@@ -32,7 +32,7 @@ function Projects() {
   return (
     <div className={`projects-container ${fadeIn ? "fade-in" : ""}`}>
       <button className="home-button" onClick={() => navigate("/")}>
-        ⬅ Home
+        Home
       </button>
 
       <h1>Projects</h1>
