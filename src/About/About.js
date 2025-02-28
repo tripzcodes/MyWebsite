@@ -9,10 +9,9 @@ const About = () => {
   const [index, setIndex] = useState(0);
   const [doneTyping, setDoneTyping] = useState(false);
 
-  const bio = `My name is Youssef Ashraf, also known as tripz.
-I'm a former esports player who competed in Tier 2 Valorant, participating in the Valorant Challengers league in the Middle East.
-I also played Fortnite professionally.
-Now, I'm a developer known as tripzcodes, an aspiring game dev mainly coding in C++, experienced with Unity & Unreal Engine.`;
+  const bio = `My name is Youssef Ashraf, also known as "tripz".
+I'm a former esports competitor, having played Fortnite and Tier 2 Valorant at a high level, including participation in the Valorant Challengers League in the Middle East.
+Now, I’ve transitioned into game development as "tripzcodes," specializing in C++. I have experience working with both Unity and Unreal Engine, and I'm passionate about crafting immersive gameplay experiences.`;
 
   useEffect(() => {
     if (index < bio.length) {

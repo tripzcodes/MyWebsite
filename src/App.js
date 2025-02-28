@@ -96,12 +96,21 @@ function App() {
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/songs`);
-        const data = await response.json();
+        const url = `${API_BASE_URL.replace(/\/$/, '')}/api/songs`;    
+        const response = await fetch(url);
+        
+        // If the response is NOT JSON, log the text response
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          const textResponse = await response.text();
+          console.error("Non-JSON response:", textResponse);
+          return;
+        }
     
+        const data = await response.json();
         const filteredSongs = data.filter(song => song.toLowerCase().endsWith(".mp3"));
         setSongs(filteredSongs);
-  
+    
         if (!currentSong && filteredSongs.length > 0) {
           const randomSong = filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
           setCurrentSong(randomSong);
@@ -135,23 +144,28 @@ function App() {
   const fetchAlbumArt = async () => {
     if (!currentSong) return;
   
-    const fileName = currentSong.split("/").pop();
+    const fileName = currentSong.split("/").pop().trim(); // Trim any extra spaces
+    const cleanAPIUrl = `${API_BASE_URL.replace(/\/$/, '')}/api/song-image`;
   
     try {
-      const response = await fetch(`${API_BASE_URL}/api/song-image?file=${encodeURIComponent(fileName)}`);
-    
+      const response = await fetch(`${cleanAPIUrl}?file=${encodeURIComponent(fileName)}`);
+      
+      if (!response.ok) {
+        console.error("Failed to fetch album art:", response.status, response.statusText);
+        setSongImage("/images/default-cover.jpg");
+        return;
+      }
+  
       const blob = await response.blob();
-  
       const imageUrl = URL.createObjectURL(blob);
-  
       setSongImage(imageUrl);
   
-      const img = new Image();
-      img.src = imageUrl;
     } catch (error) {
+      console.error("Error fetching album art:", error);
       setSongImage("/images/default-cover.jpg");
     }
   };
+  
 
   useEffect(() => {
     fetchAlbumArt();

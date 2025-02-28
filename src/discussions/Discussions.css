@@ -11,6 +11,7 @@
     text-align: center;
     position: relative;
     opacity: 0;
+    backdrop-filter: blur(var(--blur-intensity));
 }
 
 .post-header-container {
