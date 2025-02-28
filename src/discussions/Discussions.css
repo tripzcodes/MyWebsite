@@ -353,3 +353,77 @@ html, body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+@media (max-width: 1024px) {
+    .discussions-title {
+        font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+    }
+
+    .post-header-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .post-header {
+        font-size: clamp(1.4rem, 2vw, 1.8rem);
+        max-width: 75%;
+    }
+
+    .post-viewer {
+        max-width: 90vw;
+        padding: 18px;
+    }
+
+    .post-item {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .discussions-container {
+        padding: 20px;
+    }
+
+    .post-list {
+        width: 95%;
+    }
+
+    .post-viewer {
+        padding: 15px;
+    }
+
+    .post-header {
+        font-size: 1.5rem;
+        max-width: 70%;
+    }
+
+    .close-button {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .discussions-title {
+        font-size: 1.5rem;
+    }
+
+    .post-header {
+        font-size: 1.2rem;
+    }
+
+    .post-viewer {
+        padding: 12px;
+        margin: 20px auto;
+    }
+
+    .post-item {
+        padding: 12px;
+    }
+
+    .close-button {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+}

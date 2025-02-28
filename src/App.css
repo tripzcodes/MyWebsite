@@ -6,11 +6,7 @@
   --blur-intensity: 2px;
 }
 
-@media (min-resolution: 2dppx){
-  :root{
-    --blur-intensity: 1.5px;
-  }
-}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -346,4 +342,128 @@ button:active {
   background-color: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(var(--blur-intensity));
   z-index: 0;
+}
+
+@media (max-width: 1024px) {
+  .app-container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    padding: 10px;
+  }
+}
+@media (max-width: 1024px) {
+  .home-title {
+    font-size: 2.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  button {
+    padding: 10px 25px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  button {
+    padding: 8px 20px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  button {
+    padding: 6px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+}
+
+@media (min-resolution: 2dppx){
+  :root{
+    --blur-intensity: 1.5px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .music-player {
+    min-width: 300px;
+    padding: 12px;
+  }
+  .album-cover {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .music-player {
+    min-width: 250px;
+    padding: 10px;
+  }
+  .album-cover {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .music-player {
+    min-width: 220px;
+    padding: 8px;
+    top: 10px;
+    right: 10px;
+  }
+  .album-cover {
+    width: 40px;
+    height: 40px;
+  }
+  .music-info {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .volume-slider {
+    width: 80px;
+  }
+
+  .progress-bar {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .volume-slider {
+    width: 70px;
+  }
+
+  .progress-bar {
+    width: 85%;
+  }
+}
+
+@media (max-width: 768px) {
+  .music-info, .post-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

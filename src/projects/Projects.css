@@ -150,3 +150,65 @@
         padding: 5px 12px;
     }
 }
+
+@media (max-width: 1024px) {
+    .projects-container h1 {
+        font-size: clamp(1.8rem, 2.2vw, 2.5rem); 
+    }
+
+    .projects-list {
+        max-width: 90vw;
+    }
+
+    .project-item {
+        padding: 16px;
+    }
+
+    .project-title {
+        font-size: clamp(1.4rem, 2vw, 1.8rem); 
+    }
+
+    .project-item p {
+        font-size: clamp(14px, 1.8vw, 16px);
+    }
+}
+
+@media (max-width: 768px) {
+    .projects-container {
+        padding: 15px;
+    }
+
+    .projects-list {
+        width: 95%;
+    }
+
+    .project-item {
+        padding: 14px;
+    }
+
+    .home-button {
+        top: 12px;
+        left: 12px;
+        font-size: 13px;
+        padding: 4px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .projects-container h1 {
+        font-size: 1.5rem;
+    }
+
+    .project-title {
+        font-size: 1.3rem;
+    }
+
+    .project-item {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .project-item p {
+        font-size: 13px;
+    }
+}
