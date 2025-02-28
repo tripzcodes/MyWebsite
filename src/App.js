@@ -91,33 +91,46 @@ function App() {
     document.body.style.backgroundColor = location.pathname === "/about" ? "#0d0d0d" : "#000";
   }, [location.pathname]);
 
-  const API_BASE_URL = process.env.REACT_APP_BACKEND_API;
+  const API_BASE_URL = process.env.REACT_APP_BACKEND_API?.replace(/\/$/, "");
 
   useEffect(() => {
     const fetchSongs = async () => {
+      if (!API_BASE_URL) {
+        console.error("❌ API_BASE_URL is undefined. Check your environment variables.");
+        return;
+      }
+  
       try {
-        const url = `${API_BASE_URL.replace(/\/$/, '')}/api/songs`;    
+        const url = `${API_BASE_URL}/api/songs`;
+        console.log(`🎵 Fetching songs from: ${url}`);
+  
         const response = await fetch(url);
         
-        // If the response is NOT JSON, log the text response
+        if (!response.ok) {
+          console.error(`❌ Error fetching songs: ${response.status} ${response.statusText}`);
+          return;
+        }
+  
         const contentType = response.headers.get("content-type");
         if (!contentType || !contentType.includes("application/json")) {
           const textResponse = await response.text();
-          console.error("Non-JSON response:", textResponse);
+          console.error("❌ Non-JSON response:", textResponse);
           return;
         }
-    
+  
         const data = await response.json();
         const filteredSongs = data.filter(song => song.toLowerCase().endsWith(".mp3"));
+  
+        console.log(`✅ Found ${filteredSongs.length} songs`);
         setSongs(filteredSongs);
-    
+  
         if (!currentSong && filteredSongs.length > 0) {
           const randomSong = filteredSongs[Math.floor(Math.random() * filteredSongs.length)];
           setCurrentSong(randomSong);
           localStorage.setItem("lastSong", randomSong);
         }
       } catch (error) {
-        console.error("Error fetching songs:", error);
+        console.error("❌ Error fetching songs:", error);
       }
     };
   
@@ -126,12 +139,16 @@ function App() {
 
 
   useEffect(() => {
-    if (currentSong && audioRef.current) {
-      audioRef.current.src = currentSong;
-      audioRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch(() => setIsPlaying(false));
-    }
+    if (!currentSong || !audioRef.current) return;
+  
+    audioRef.current.src = currentSong;
+    audioRef.current
+      .play()
+      .then(() => setIsPlaying(true))
+      .catch(error => {
+        console.warn("⚠️ Playback error:", error);
+        setIsPlaying(false);
+      });
   }, [currentSong]);
 
   
@@ -142,16 +159,18 @@ function App() {
   }, [volume]);
 
   const fetchAlbumArt = async () => {
-    if (!currentSong) return;
+    if (!currentSong || !API_BASE_URL) return;
   
-    const fileName = currentSong.split("/").pop().trim(); // Trim any extra spaces
-    const cleanAPIUrl = `${API_BASE_URL.replace(/\/$/, '')}/api/song-image`;
+    const fileName = encodeURIComponent(currentSong.split("/").pop().trim());
+    const cleanAPIUrl = `${API_BASE_URL}/api/song-image`;
   
     try {
-      const response = await fetch(`${cleanAPIUrl}?file=${encodeURIComponent(fileName)}`);
+      console.log(`🖼 Fetching album cover from: ${cleanAPIUrl}?file=${fileName}`);
+  
+      const response = await fetch(`${cleanAPIUrl}?file=${fileName}`);
       
       if (!response.ok) {
-        console.error("Failed to fetch album art:", response.status, response.statusText);
+        console.warn(`⚠️ Album art fetch failed: ${response.status} ${response.statusText}`);
         setSongImage("/images/default-cover.jpg");
         return;
       }
@@ -161,7 +180,7 @@ function App() {
       setSongImage(imageUrl);
   
     } catch (error) {
-      console.error("Error fetching album art:", error);
+      console.error("❌ Error fetching album art:", error);
       setSongImage("/images/default-cover.jpg");
     }
   };
