@@ -274,23 +274,23 @@ function App() {
     };
   }, [isMinimized]);
 
-  useEffect(() => {
-    const preventOutOfBoundsScroll = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  // useEffect(() => {
+  //   const preventOutOfBoundsScroll = () => {
+  //     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
   
-      if (window.scrollY < 0) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      } else if (window.scrollY > maxScroll) {
-        window.scrollTo({ top: maxScroll, behavior: "smooth" });
-      }
-    };
+  //     if (window.scrollY < 0) {
+  //       window.scrollTo({ top: 0, behavior: "smooth" });
+  //     } else if (window.scrollY > maxScroll) {
+  //       window.scrollTo({ top: maxScroll, behavior: "smooth" });
+  //     }
+  //   };
   
-    window.addEventListener("scroll", preventOutOfBoundsScroll);
+  //   window.addEventListener("scroll", preventOutOfBoundsScroll);
   
-    return () => {
-      window.removeEventListener("scroll", preventOutOfBoundsScroll);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("scroll", preventOutOfBoundsScroll);
+  //   };
+  // }, []);
   
 
   return (
