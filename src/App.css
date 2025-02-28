@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --blur-intensity: 1px;
+  --blur-intensity: 0.5px;
 }
 
 
