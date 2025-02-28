@@ -6,21 +6,17 @@ const BackgroundRenderer = () => {
 
   useEffect(() => {
 
-    // ✅ Store ref in a variable to avoid ESLint warning
     const mountNode = mountRef.current;
     if (!mountNode) return;
-    // ✅ Scene Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 15;
 
-    // ✅ Renderer
     const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     if (mountRef.current) mountRef.current.appendChild(renderer.domElement);
 
-    // ✅ Particle Settings
     const screenWidth = window.innerWidth;
     const areaSize = screenWidth > 1600 ? 32 : 25; // Adjusted slightly
     const particleCount = 250;
@@ -51,20 +47,17 @@ const BackgroundRenderer = () => {
     const points = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(points);
 
-    // ✅ Line System
     const lineGeometry = new THREE.BufferGeometry();
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0x888888, transparent: true, opacity: 0.2 });
     const lineMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
     scene.add(lineMesh);
 
-    // ✅ Mouse Interaction
     const mouse = new THREE.Vector2(0, 0);
     window.addEventListener("mousemove", (event) => {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     });
 
-    // ✅ Animation Loop
     const animate = () => {
       requestAnimationFrame(animate);
 
@@ -78,8 +71,7 @@ const BackgroundRenderer = () => {
       }
       particleGeometry.attributes.position.needsUpdate = true;
 
-      // ✅ Adjusted Line Density
-      const threshold = screenWidth > 1600 ? 4 : 3.2; // Slightly lowered threshold for better visibility
+      const threshold = screenWidth > 1600 ? 4 : 3.2;
       const linePositions = [];
 
       for (let i = 0; i < particleCount; i++) {
@@ -101,7 +93,6 @@ const BackgroundRenderer = () => {
       lineGeometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(linePositions), 3));
       lineGeometry.needsUpdate = true;
 
-      // ✅ Smooth Mouse Tracking
       camera.position.x += (mouse.x * 0.15 - camera.position.x) * 0.05;
       camera.position.y += (mouse.y * 0.15 - camera.position.y) * 0.05;
       camera.lookAt(scene.position);
@@ -111,7 +102,6 @@ const BackgroundRenderer = () => {
 
     animate();
 
-    // ✅ Handle Resizing
     const handleResize = () => {
       renderer.setSize(window.innerWidth, window.innerHeight);
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -119,11 +109,9 @@ const BackgroundRenderer = () => {
     };
     window.addEventListener("resize", handleResize);
 
-    // ✅ Cleanup
     return () => {
         window.removeEventListener("resize", handleResize);
         
-        // ✅ Safely remove the WebGL renderer
         if (mountNode.contains(renderer.domElement)) {
           mountNode.removeChild(renderer.domElement);
         }
