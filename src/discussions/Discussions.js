@@ -45,6 +45,8 @@ function Discussions() {
   }, [currentPost]);
 
   const loadPost = async (file, title) => {
+    const scrollPosition = window.scrollY; 
+  
     setLoading(true);
     setSelectedTitle(title);
     try {
@@ -58,6 +60,10 @@ function Discussions() {
     } finally {
       setLoading(false);
     }
+  
+    setTimeout(() => {
+      window.scrollTo(0, scrollPosition);
+    }, 50);
   };
 
   const closePost = () => {
