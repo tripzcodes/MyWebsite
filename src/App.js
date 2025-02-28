@@ -18,14 +18,14 @@ function MainPage() {
   const dialogueLines = ["Hello.", "Welcome to my world."];
 
   useEffect(() => {
-    document.body.style.background = "transparent"; // ✅ Keeps WebGL visible
+    document.body.style.background = "transparent"; 
 
     if (location.state?.skipIntro || sessionStorage.getItem("skipIntro") === "true") {
       setShowButtons(true);
       return;
     }
 
-    sessionStorage.setItem("skipIntro", "true"); // ✅ Save state across pages
+    sessionStorage.setItem("skipIntro", "true"); 
 
     let timeouts = [];
 
@@ -84,14 +84,12 @@ function App() {
 
   const audioRef = useRef(null);
 
-  // ✅ Update Background Color When Changing Pages
   useEffect(() => {
     document.body.style.backgroundColor = location.pathname === "/about" ? "#0d0d0d" : "#000";
   }, [location.pathname]);
 
   const API_BASE_URL = "https://websitebackend-production-d425.up.railway.app";
 
-  // ✅ Fetch Song List Once
   useEffect(() => {
     const fetchSongs = async () => {
       try {
@@ -125,15 +123,12 @@ function App() {
   }, [currentSong]);
 
   
-
-  // ✅ Sync Volume with Local Storage & Audio Element
   useEffect(() => {
     if (!audioRef.current) return;
     audioRef.current.volume = volume;
     localStorage.setItem("volume", volume);
   }, [volume]);
 
-  // ✅ Fetch Album Art for Current Song
   const fetchAlbumArt = async () => {
     if (!currentSong) return;
   
@@ -143,24 +138,17 @@ function App() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/song-image?file=${encodeURIComponent(fileName)}`);
       console.log(`📡 Request sent: ${API_BASE_URL}/api/song-image?file=${encodeURIComponent(fileName)}`);
-  
-      if (!response.ok) throw new Error("❌ No image found");
-  
+    
       const blob = await response.blob();
-      console.log(`✅ Image received! Size: ${blob.size} bytes`);
   
       const imageUrl = URL.createObjectURL(blob);
       console.log(`🔗 Generated Image URL: ${imageUrl}`);
   
       setSongImage(imageUrl);
   
-      // ⏩ Test if the image is loading
       const img = new Image();
       img.src = imageUrl;
-      img.onload = () => console.log("✅ Image loaded successfully");
-      img.onerror = () => console.error("❌ Error loading image");
     } catch (error) {
-      console.error("❌ Error fetching album art:", error);
       setSongImage("/images/default-cover.jpg");
     }
   };
@@ -170,7 +158,6 @@ function App() {
   }, [currentSong]);
   
 
-  // ✅ Real-time Progress Bar Update
   useEffect(() => {
     if (!audioRef.current) return;
 
@@ -214,7 +201,7 @@ function App() {
     } else {
       audioRef.current
         .play()
-        .then(() => setIsPlaying(true)) // ✅ Only update if play is successful
+        .then(() => setIsPlaying(true))
         .catch(() => console.warn("❌ Playback error"));
     }
   };
@@ -228,26 +215,21 @@ function App() {
     }
   };
 
-  // ✅ Improved Song Title Formatting
   const getFilteredSongTitle = () => {
     if (!currentSong) return "";
     
-    // ✅ Extract only the filename
     const songFilename = currentSong.split("/").pop();
   
-    // ✅ Clean up the name (remove S3 URL and unnecessary text)
     return songFilename
-      .replace(/\[SPOTDOWNLOADER\.COM\]/g, "") // Remove tag
-      .replace(".mp3", "") // Remove file extension
-      .replace(/_/g, " ") // Replace underscores with spaces (if any)
-      .trim(); // Remove any leading/trailing spaces
+      .replace(/\[SPOTDOWNLOADER\.COM\]/g, "")
+      .replace(".mp3", "")
+      .replace(/_/g, " ") 
+      .trim();
   };
 
   return (
     <>
-      {/* 🔥 Add Background WebGL Renderer */}
       <BackgroundRenderer />
-      {/* 🔥 Persistent Music Player */}
       <div className="music-player">
         <img src={songImage} alt="Song Cover" className="album-cover" />
 
@@ -275,7 +257,6 @@ function App() {
 
       <audio ref={audioRef} src={currentSong} onEnded={handleSongEnd} autoPlay />
 
-      {/* 🔥 Page Routing */}
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/about" element={<About />} />

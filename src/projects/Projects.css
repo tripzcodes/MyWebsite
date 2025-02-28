@@ -1,4 +1,3 @@
-/* 🔥 Matches About Page */
 .projects-container {
     display: flex;
     flex-direction: column;
@@ -6,37 +5,34 @@
     justify-content: center;
     min-height: 100vh;
     padding: 40px 20px;
-    background-color: rgba(0, 0, 0, 0.6); /* ✅ Matches Other Pages */
-    backdrop-filter: blur(2px); /* ✅ Keeps WebGL Visible */
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(var(--blur-intensity));
     color: #e0e0e0;
     font-family: "Inter", sans-serif;
     text-align: left;
     position: relative;
-    opacity: 0; /* Starts hidden to prevent white flash */
+    opacity: 0;
+    will-change: transform, backdrop-filter;
 }
 
-/* ✅ Ensures fade-in applies instantly on component mount */
 .fade-in {
     opacity: 1 !important;
     transform: translateY(0) !important;
     animation: fadeIn 0.8s ease-in-out forwards;
 }
 
-/* 🔥 Ensures everything fades in smoothly */
 .projects-container * {
     opacity: 0;
     transform: translateY(10px);
     animation: fadeIn 0.8s ease-in-out forwards;
 }
 
-/* ✅ Prevent any unintended animation delays */
 .projects-list,
 .projects-container h1,
 .project-item {
     animation-delay: 0s !important;
 }
 
-/* 🔥 Fade-in Effect */
 @keyframes fadeIn {
     0% {
         opacity: 0;
@@ -48,7 +44,6 @@
     }
 }
 
-/* 🔥 Home Button */
 .home-button {
     position: absolute;
     top: 20px;
@@ -68,7 +63,6 @@
     color: black;
 }
 
-/* 🔥 Title Styling */
 .projects-container h1 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -79,7 +73,6 @@
     margin-bottom: 25px;
 }
 
-/* 🔥 Project List */
 .projects-list {
     list-style: none;
     padding: 0;
@@ -87,7 +80,6 @@
     max-width: 750px;
 }
 
-/* 🔥 Project Items */
 .project-item {
     padding: 20px;
     margin-bottom: 20px;
@@ -96,28 +88,25 @@
     transition: background 0.3s ease-in-out;
     opacity: 0;
     transform: translateY(10px);
-    animation: fadeIn 0.8s ease-in-out forwards 0.2s; /* ✅ Delayed fade-in */
+    animation: fadeIn 0.8s ease-in-out forwards 0.2s; 
 }
 
 .project-item:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
-/* 🔥 Project Title */
 .project-title {
     font-size: 22px;
     font-weight: 600;
     color: #e0e0e0;
 }
 
-/* 🔥 Project Date & Source Code */
 .project-meta {
     font-size: 14px;
     color: #bdbdbd;
     margin: 5px 0;
 }
 
-/* 🔥 Source Code Link */
 .source-code {
     color: #ff6666;
     font-weight: 500;
@@ -128,7 +117,6 @@
     text-decoration: underline;
 }
 
-/* 🔥 Description */
 .project-item p {
     font-size: 15px;
     color: #c0c0c0;
@@ -136,7 +124,6 @@
     line-height: 1.6;
 }
 
-/* 🔥 Loading & Error Messages */
 .loading,
 .error {
     font-size: 18px;
@@ -144,10 +131,9 @@
     text-align: center;
     margin-top: 20px;
     opacity: 0;
-    animation: fadeIn 0.5s ease-in-out forwards; /* ✅ Loading text fades in smoothly */
+    animation: fadeIn 0.5s ease-in-out forwards; 
 }
 
-/* 🔥 Responsive Tweaks */
 @media (max-width: 768px) {
     .projects-container {
         padding: 20px;

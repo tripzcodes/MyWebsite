@@ -116,14 +116,12 @@
     color: white;
 }
 
-/* Markdown Styling */
 .post-header {
     font-size: 1.8rem;
     color: #ff6666;
     margin-bottom: 10px;
 }
 
-/* Scrollbar Styling - Ensure it's applied to ReactMarkdown's output */
 .post-viewer pre,
 .post-viewer pre code {
     background: #0d0d0d !important;
@@ -146,17 +144,14 @@
     color: #ffcc99;
 }
 
-/* Highlight Functions */
 .post-viewer code:contains("(") {
     color: #66d9ef;
 }
 
-/* Highlight Variables */
 .post-viewer code:contains("int") {
     color: #a6e22e;
 }
 
-/* Highlight Keywords */
 .post-viewer code:contains("return"),
 .post-viewer code:contains("void"),
 .post-viewer code:contains("class"),
@@ -166,7 +161,6 @@
     color: #f92672;
 }
 
-/* Lists */
 .post-viewer ul {
     list-style-type: disc;
     padding-left: 25px;
@@ -184,7 +178,6 @@
     color: #f8f8f2;
 }
 
-/* Blockquotes */
 .post-viewer blockquote {
     border-left: 5px solid #ff6666;
     padding-left: 12px;
@@ -198,7 +191,6 @@
     margin-bottom: 10px;
 }
 
-/* Tables */
 .post-viewer table {
     width: 100%;
     border-collapse: collapse;
@@ -217,12 +209,10 @@
     color: #ff6666;
 }
 
-/* Math Equations */
 .katex-display {
     text-align: left;
 }
 
-/* Home Button */
 .home-button {
     position: absolute;
     top: 20px;
@@ -242,7 +232,6 @@
     color: black;
 }
 
-/* Fade-In Effect */
 @keyframes fadeIn {
     0% {
         opacity: 0;
@@ -254,7 +243,6 @@
     }
 }
 
-/* Responsive Tweaks */
 @media (max-width: 768px) {
     .discussions-container {
         padding: 20px;
@@ -280,7 +268,6 @@
     }
 }
 
-/* Apply Scrollbar to dynamically loaded Markdown content */
 .custom-scrollbar::-webkit-scrollbar {
     height: 6px;
 }
@@ -300,13 +287,11 @@
     background: #666;
 }
 
-/* Fix word wrap issues inside code blocks */
 .custom-scrollbar {
     white-space: pre;
     word-wrap: normal;
 }
 
-/* Apply Scrollbar Styling - rehype-highlight might be modifying elements */
 .post-viewer pre::-webkit-scrollbar,
 .post-viewer code::-webkit-scrollbar {
     height: 6px;
@@ -330,7 +315,6 @@
     background: #666;
 }
 
-/* Fix word wrap issues inside code blocks */
 .post-viewer pre,
 .post-viewer code {
     white-space: pre;
@@ -338,10 +322,15 @@
     overflow-x: auto;
 }
 
-/* Ensuring rehype-highlight classes get applied */
 .hljs {
     display: block;
     overflow-x: auto;
     padding: 12px;
     border-radius: 8px;
+}
+
+html, body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }

@@ -1,4 +1,3 @@
-/* 🔥 General Layout */
 .about-container {
     display: flex;
     flex-direction: column;
@@ -6,15 +5,15 @@
     justify-content: center;
     height: 100vh;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.6); /* ✅ Matches Home Page */
-    backdrop-filter: blur(2px); /* ✅ Reduced Blur for WebGL Visibility */
-    color: #e0e0e0; /* Softer white */
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(var(--blur-intensity));
+    color: #e0e0e0;
     font-family: "Inter", sans-serif;
     text-align: center;
     position: relative;
+    will-change: transform, backdrop-filter;
 }
 
-/* 🔥 Title with Subtle Glow */
 .about-title {
     font-size: 2.8rem;
     font-weight: 700;
@@ -24,7 +23,6 @@
     margin-bottom: 10px;
 }
 
-/* 🔥 Subtle Divider */
 .divider {
     width: 60px;
     height: 2px;
@@ -33,7 +31,6 @@
     border-radius: 2px;
 }
 
-/* 🔥 Content */
 .about-content {
     max-width: 550px;
     line-height: 1.8;
@@ -42,7 +39,6 @@
     animation: fadeIn 0.8s ease-in-out forwards;
 }
 
-/* 🔥 Home Button */
 .home-button {
     position: absolute;
     top: 20px;
@@ -62,7 +58,6 @@
     color: black;
 }
 
-/* 🔥 Typing Effect */
 .typing-text, .typed-text {
     font-size: 17px;
     text-align: left;
@@ -70,7 +65,6 @@
     color: #ccc;
 }
 
-/* 🔥 Blinking Cursor */
 .cursor {
     display: inline-block;
     width: 6px;
@@ -84,7 +78,6 @@
     50% { opacity: 0; }
 }
 
-/* 🔥 Social Links */
 .social-links {
     margin-top: 25px;
     display: flex;
@@ -92,7 +85,6 @@
     gap: 25px;
 }
 
-/* 🔥 Social Icons */
 .social-icon {
     font-size: 28px;
     color: white;
@@ -103,7 +95,6 @@
     transform: scale(1.2);
 }
 
-/* 🔥 Twitter & GitHub Hover Effects */
 .social-icon:nth-child(1):hover {
     color: #1da1f2;
 }
@@ -112,7 +103,6 @@
     color: #fafafa;
 }
 
-/* 🔥 Fade-In Effect */
 @keyframes fadeIn {
     0% {
         opacity: 0;
