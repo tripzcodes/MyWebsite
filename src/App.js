@@ -273,6 +273,26 @@ function App() {
       clearTimeout(timeoutRef.current);
     };
   }, [isMinimized]);
+
+  useEffect(() => {
+    const preventOutOfBoundsScroll = () => {
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+
+      if (window.scrollY < 0) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else if (window.scrollY > maxScroll) {
+        window.scrollTo({ top: maxScroll, behavior: "smooth" });
+      }
+    };
+
+    // Attach scroll event
+    window.addEventListener("scroll", preventOutOfBoundsScroll);
+
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener("scroll", preventOutOfBoundsScroll);
+    };
+  }, []);
   
 
   return (
