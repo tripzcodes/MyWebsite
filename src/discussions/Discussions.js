@@ -5,7 +5,7 @@ import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
 import yaml from "js-yaml";
 import "katex/dist/katex.min.css";
-import "highlight.js/styles/atom-one-dark.css"; 
+import "highlight.js/styles/atom-one-dark.css";
 import "./Discussions.css";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,10 @@ function Discussions() {
       .then((yamlText) => {
         try {
           const data = yaml.load(yamlText);
-          setPosts(data?.posts || []);
+          const sortedPosts = (data?.posts || []).sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+          );
+          setPosts(sortedPosts);
         } catch (error) {
           console.error("Error parsing YAML:", error);
           setPosts([]);
@@ -45,8 +48,8 @@ function Discussions() {
   }, [currentPost]);
 
   const loadPost = async (file, title) => {
-    const scrollPosition = window.scrollY; 
-  
+    const scrollPosition = window.scrollY;
+
     setLoading(true);
     setSelectedTitle(title);
     try {
@@ -60,7 +63,7 @@ function Discussions() {
     } finally {
       setLoading(false);
     }
-  
+
     setTimeout(() => {
       window.scrollTo(0, scrollPosition);
     }, 50);
@@ -79,24 +82,26 @@ function Discussions() {
 
       {currentPost ? (
         <div className="post-wrapper">
-        <div className="post-viewer">
-          
-          <div className="post-header-container">
+          <div className="post-viewer">
+            <div className="post-header-container">
               <h2 className="post-header">{selectedTitle}</h2>
-            <button className="close-button" onClick={closePost} aria-label="Close Post">
-              ✖ Close
-            </button>
+              <button
+                className="close-button"
+                onClick={closePost}
+                aria-label="Close Post"
+              >
+                ✖ Close
+              </button>
+            </div>
+
+            <ReactMarkdown
+              remarkPlugins={[remarkMath]}
+              rehypePlugins={[rehypeKatex, rehypeHighlight]}
+            >
+              {currentPost}
+            </ReactMarkdown>
           </div>
-      
-          <ReactMarkdown
-            remarkPlugins={[remarkMath]}
-            rehypePlugins={[rehypeKatex, rehypeHighlight]}
-          >
-            {currentPost}
-          </ReactMarkdown>
         </div>
-      </div>
-      
       ) : (
         <>
           <h1 className="discussions-title">Discussions</h1>

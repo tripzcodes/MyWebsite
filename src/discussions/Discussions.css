@@ -26,6 +26,7 @@ html, body {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+
 }
 
 .post-header {
@@ -33,10 +34,9 @@ html, body {
     font-weight: bold;
     text-align: left;
     margin: 0;
-    flex-shrink: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: calc(100% - 50px); /* Ensure space for the close button */
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .fade-in {
