@@ -8,6 +8,8 @@ import "katex/dist/katex.min.css";
 import "highlight.js/styles/atom-one-dark.css";
 import "./Discussions.css";
 import { useNavigate } from "react-router-dom";
+import remarkGfm from "remark-gfm";
+
 
 function Discussions() {
   const [posts, setPosts] = useState([]);
@@ -95,10 +97,21 @@ function Discussions() {
             </div>
 
             <ReactMarkdown
-              remarkPlugins={[remarkMath]}
-              rehypePlugins={[rehypeKatex, rehypeHighlight]}
+                remarkPlugins={[remarkMath, remarkGfm]}
+                rehypePlugins={[rehypeKatex, rehypeHighlight]}
+                components={{
+                    table: ({ node, ...props }) => (
+                        <table className="markdown-content" {...props} />
+                    ),
+                    th: ({ node, ...props }) => (
+                        <th className="markdown-content" {...props} />
+                    ),
+                    td: ({ node, ...props }) => (
+                        <td className="markdown-content" {...props} />
+                    ),
+                }}
             >
-              {currentPost}
+                {currentPost}
             </ReactMarkdown>
           </div>
         </div>

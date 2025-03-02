@@ -2,16 +2,16 @@
 
 ## Introduction
 
-The objective of this analysis was to build and evaluate machine learning models to classify wine quality based on various chemical properties. The dataset consisted of red and white wines, with features such as acidity, sugar content, and alcohol levels, along with a quality rating. To simplify the problem, we converted the quality scores into a binary classification:  
+The objective of this analysis was to build and evaluate machine learning models to classify wine quality based on various chemical properties. The dataset consisted of red and white wines, with features such as acidity, sugar content, and alcohol levels, along with a quality rating. To simplify the problem, Iconverted the quality scores into a binary classification:  
 - `0` (Bad Wine) for scores less than 6.  
 - `1` (Good Wine) for scores 6 or higher.
 
-We explored three main models:
+I explored three main models:
 - **Random Forest**: Known for handling high-dimensional data efficiently.  
 - **K-Nearest Neighbors (KNN)**: Effective for simple datasets but can struggle with dimensionality.  
 - **XGBoost**: A powerful boosting algorithm that often achieves state-of-the-art performance.
 
-To enhance performance, we applied feature selection, normalization, PCA, and extensive hyperparameter tuning. The goal was to maximize accuracy while preventing overfitting. In this report, we discuss the performance of each model based on accuracy, confusion matrices, and learning curves.
+To enhance performance, Iapplied feature selection, normalization, PCA, and extensive hyperparameter tuning. The goal was to maximize accuracy while preventing overfitting. In this report, Idiscuss the performance of each model based on accuracy, confusion matrices, and learning curves.
 
 ---
 

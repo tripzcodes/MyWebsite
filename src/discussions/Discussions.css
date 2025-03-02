@@ -34,21 +34,18 @@ html, body {
     font-weight: bold;
     text-align: left;
     margin: 0;
-    max-width: calc(100% - 50px); /* Ensure space for the close button */
+    max-width: calc(100% - 50px);
     overflow-wrap: break-word;
     word-break: break-word;
 }
 
-.fade-in {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    animation: fadeIn 0.8s ease-in-out forwards;
-}
 
-.discussions-container * {
+
+.discussions-container > *:not(table):not(.markdown-content table) {
     opacity: 0;
     transform: translateY(10px);
     animation: fadeIn 0.8s ease-in-out forwards;
+    animation-fill-mode: forwards;
 }
 
 .discussions-title {
@@ -438,4 +435,40 @@ html, body {
         font-size: 10px;
         padding: 4px 8px;
     }
+}
+.markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid #444;
+}
+
+.markdown-content th,
+.markdown-content td {
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: left;
+    color: #ddd;
+    background-color: rgba(15, 15, 15, 0.95);
+}
+
+.markdown-content th {
+    background-color: #222;
+    color: #ff6666;
+}
+
+.markdown-content tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.markdown-content tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.markdown-content table,
+.markdown-content th,
+.markdown-content td {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
 }
