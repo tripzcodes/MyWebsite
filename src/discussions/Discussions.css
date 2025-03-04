@@ -15,7 +15,7 @@ html, body {
     text-align: center;
     position: relative;
     opacity: 0;
-    backdrop-filter: blur(var(--blur-intensity));
+    -webkit-backdrop-filter: blur(var(--blur-intensity));
     overflow-y: auto;
     scroll-behavior: smooth;
     padding-bottom: 100px;

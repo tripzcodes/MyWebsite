@@ -6,13 +6,13 @@
     min-height: 100vh;
     padding: 40px 20px;
     background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(var(--blur-intensity));
+    -webkit-backdrop-filter: blur(var(--blur-intensity));
     color: #e0e0e0;
     font-family: "Inter", sans-serif;
     text-align: left;
     position: relative;
     opacity: 0;
-    will-change: transform, backdrop-filter;
+    will-change: transform, -webkit-backdrop-filter;
     overflow-y: auto;
     max-height: 100vh;
     scroll-behavior: smooth;
