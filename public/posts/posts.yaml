@@ -10,3 +10,7 @@ posts:
   - title: "Shader-Based Fog of War with Diffusion and Dissolve Shaders"
     date: "2025-03-04"
     file: "shaderbasedfogofwar.md"
+
+  - title: "Melee Attack Patterns with Behavior Trees and Blackboard System"
+    date: "2025-03-05"
+    file: "BehaviorTreesAndBlackboard.md"
