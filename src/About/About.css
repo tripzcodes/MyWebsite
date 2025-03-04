@@ -7,11 +7,12 @@
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.6);
     -webkit-backdrop-filter: blur(var(--blur-intensity));
+    backdrop-filter: blur(var(--blur-intensity));
     color: #e0e0e0;
     font-family: "Inter", sans-serif;
     text-align: center;
     position: relative;
-    will-change: transform, -webkit-backdrop-filter;
+    will-change: transform, backdrop-filter;
     overflow-y: auto;
     max-height: 100vh;
     scroll-behavior: smooth;
