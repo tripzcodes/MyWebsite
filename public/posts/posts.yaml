@@ -6,3 +6,7 @@ posts:
   - title: "Wine Quality Classification: Model Selection and Analysis"
     date: "2025-03-02"
     file: "something.md"
+  
+  - title: "Shader-Based Fog of War with Diffusion and Dissolve Shaders"
+    date: "2025-03-04"
+    file: "shaderbasedfogofwar.md"
