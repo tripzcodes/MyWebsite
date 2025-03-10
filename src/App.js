@@ -6,6 +6,8 @@ import About from "./About/About.js";
 import BackgroundRenderer from "./BackgroundRenderer.js";
 import Projects from "./projects/Projects.js";
 import Discussions from "./discussions/Discussions.js";
+import { Analytics } from "@vercel/analytics/react"
+
 
 function MainPage() {
   const navigate = useNavigate();
@@ -296,8 +298,10 @@ function App() {
   return (
     <>
       <BackgroundRenderer />
+      <Analytics />
   
       <div
+      
         className={`music-player ${isMinimized ? "minimized" : ""}`}
         onClick={() => setIsMinimized(false)}
       >
