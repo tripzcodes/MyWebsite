@@ -14,3 +14,10 @@ posts:
   - title: "Attack Patterns with Behavior Trees and Blackboard System"
     date: "2025-03-05"
     file: "BehaviorTreesAndBlackboard.md"
+
+  - title: "Theseus Enemy AI System: Behavior Tree & Blackboard Implementation"
+    date: "2025-03-25"
+    file: "Blackboard&BehavioralTrees.md"
+
+
+    
