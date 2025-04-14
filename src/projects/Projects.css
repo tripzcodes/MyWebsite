@@ -138,6 +138,64 @@
     animation: fadeIn 0.5s ease-in-out forwards; 
 }
 
+.sort-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+    width: 100%;
+    max-width: 750px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.8s ease-in-out forwards 0.1s;
+}
+
+.sort-button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #bdbdbd;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-family: "Inter", sans-serif;
+}
+
+.sort-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sort-button.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Media queries for responsive sort controls */
+@media (max-width: 768px) {
+    .sort-controls {
+        max-width: 90vw;
+    }
+    
+    .sort-button {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sort-controls {
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .sort-button {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
+
 @media (max-width: 768px) {
     .projects-container {
         padding: 20px;

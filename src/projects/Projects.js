@@ -6,6 +6,7 @@ function Projects() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sortOrder, setSortOrder] = useState("desc");
   const navigate = useNavigate();
   const [fadeIn, setFadeIn] = useState(false);
 
@@ -18,7 +19,7 @@ function Projects() {
         if (!response.ok) throw new Error("Failed to fetch repositories");
 
         const data = await response.json();
-        setRepos(data);
+        sortRepos(data, sortOrder);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -29,13 +30,42 @@ function Projects() {
     fetchRepos();
   }, []);
 
+  const sortRepos = (repoData, order) => {
+    const sortedRepos = [...repoData].sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      return order === "asc" ? dateA - dateB : dateB - dateA;
+    });
+    setRepos(sortedRepos);
+  };
+
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+    sortRepos(repos, order);
+  };
+
   return (
     <div className={`projects-container ${fadeIn ? "fade-in" : ""}`}>
       <button className="home-button" onClick={() => navigate("/")}>
         Home
       </button>
 
-      <h1>Projects</h1>
+      <h1>PROJECTS</h1>
+      
+      <div className="sort-controls">
+        <button 
+          className={`sort-button ${sortOrder === "desc" ? "active" : ""}`}
+          onClick={() => handleSortChange("desc")}
+        >
+          Newest First
+        </button>
+        <button 
+          className={`sort-button ${sortOrder === "asc" ? "active" : ""}`}
+          onClick={() => handleSortChange("asc")}
+        >
+          Oldest First
+        </button>
+      </div>
 
       {loading ? (
         <p className="loading">Loading repositories...</p>
