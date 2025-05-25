@@ -289,7 +289,7 @@ function App() {
   
   //   window.addEventListener("scroll", preventOutOfBoundsScroll);
   
-  //   return () => {
+  //   return () => { soft
   //     window.removeEventListener("scroll", preventOutOfBoundsScroll);
   //   };
   // }, []);
