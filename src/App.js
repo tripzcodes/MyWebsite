@@ -158,6 +158,7 @@ function App() {
   
     const fileName = encodeURIComponent(currentSong.split("/").pop().trim());
     const cleanAPIUrl = `${API_BASE_URL}/api/song-image`;
+    console.log("Fetching from:", cleanAPIUrl);
   
     try {
   
