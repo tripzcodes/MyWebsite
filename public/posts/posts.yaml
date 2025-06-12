@@ -19,5 +19,9 @@ posts:
     date: "2025-03-25"
     file: "Blackboard&BehavioralTrees.md"
 
+  - title: "Static Typing or Dynamic Typing in Game Development: A Developer's Perspective"
+    date: "2025-06-12"
+    file: "StaticTypingOrDynamicTyping.md"
+
 
     

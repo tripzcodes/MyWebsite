@@ -9,6 +9,7 @@ import "highlight.js/styles/atom-one-dark.css";
 import "./Discussions.css";
 import { useNavigate } from "react-router-dom";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 
 function Discussions() {
@@ -98,7 +99,7 @@ function Discussions() {
 
             <ReactMarkdown
                 remarkPlugins={[remarkMath, remarkGfm]}
-                rehypePlugins={[rehypeKatex, rehypeHighlight]}
+                rehypePlugins={[rehypeRaw, rehypeKatex, rehypeHighlight]}
                 components={{
                     table: ({ node, ...props }) => (
                         <table className="markdown-content" {...props} />
@@ -109,6 +110,13 @@ function Discussions() {
                     td: ({ node, ...props }) => (
                         <td className="markdown-content" {...props} />
                     ),
+                    span: ({ node, ...props }) => {
+                        // Handle span elements with style attributes
+                        if (props.style) {
+                            return <span style={props.style} {...props} />;
+                        }
+                        return <span {...props} />;
+                    }
                 }}
             >
                 {currentPost}
